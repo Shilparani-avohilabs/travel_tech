@@ -1,10 +1,3 @@
-doc_events = {
-    "Travel Policy": {
-        "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
-        "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
-        
-    }
-}
 app_name = "travel_tech"
 app_title = "Travel Tech"
 app_publisher = "shilparani"
@@ -150,8 +143,17 @@ doc_events = {
     "Travel Policy": {
         "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
         "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
+    },
+    "Employee": {
+        "after_insert": "travel_tech.manager.user_creation.create_user_for_manager",
+        "on_update": "travel_tech.manager.user_creation.create_user_for_manager"
+    },
+    "Travel Request": {
+        "after_insert": "travel_tech.manager.auto_submit_travel_request.auto_submit_travel_request"
     }
 }
+
+
 
 # Scheduled Tasks
 # ---------------
