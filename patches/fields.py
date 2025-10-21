@@ -31,3 +31,17 @@ def execute():
         frappe.db.commit()
         frappe.logger().info("✅ Added 'Status' field to Travel Request")
     
+    
+   # Room Type field
+    if not frappe.db.exists("Custom Field", {"dt": "Travel Request", "fieldname": "room_type"}):
+        frappe.get_doc({
+            "doctype": "Custom Field",
+            "dt": "Travel Request",
+            "fieldname": "room_type",
+            "label": "Room Type",
+            "fieldtype": "Data",
+            "insert_after": "amount",  # Adjust based on your layout
+            "description": "Type of room booked or requested (e.g., Single, Double, Suite)"
+        }).insert(ignore_permissions=True)
+        frappe.db.commit()
+        frappe.logger().info("✅ Added 'Room Type' field to Travel Request")
