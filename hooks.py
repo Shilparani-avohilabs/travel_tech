@@ -1,6 +1,8 @@
 doc_events = {
     "Travel Policy": {
         "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
+        "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
+        
     }
 }
 app_name = "travel_tech"
@@ -146,7 +148,8 @@ app_license = "mit"
 # }
 doc_events = {
     "Travel Policy": {
-        "after_insert": "travel_tech.api.policy.upload_policy_to_external_api"
+        "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
+        "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
     }
 }
 
