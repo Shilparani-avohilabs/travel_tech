@@ -140,6 +140,27 @@ app_license = "mit"
 # 	}
 # }
 
+doc_events = {
+    "Travel Policy": {
+        "after_insert": "travel.travel_app.custom.api.policy.upload_policy_to_external_api",
+        "on_update": "travel.travel_app.custom.api.policy.upload_policy_to_external_api"
+    },
+    "Employee": {
+        "after_insert": [
+            "travel.travel_app.custom.auto_creations.user_creation.create_user_for_manager",
+            "travel.travel_app.custom.auto_creations.auto_user_permission.create_user_permission_for_hr_manager"
+        ],
+        "on_update": [
+            "travel.travel_app.custom.auto_creations.user_creation.create_user_for_manager",
+            "travel.travel_app.custom.auto_creations.auto_user_permission.create_user_permission_for_hr_manager"
+        ]
+    },
+    "Travel Request": {
+        "after_insert": "travel.travel_app.custom.auto_creations.auto_submit_travel_request.auto_submit_travel_request"
+    }
+}
+
+
 # Scheduled Tasks
 # ---------------
 
