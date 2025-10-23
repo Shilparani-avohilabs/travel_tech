@@ -139,6 +139,28 @@ app_license = "mit"
 # 		"on_trash": "method"
 # 	}
 # }
+ddoc_events = {
+    "Travel Policy": {
+        "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
+        "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
+    },
+    "Employee": {
+        "after_insert": [
+            "travel_tech.manager.user_creation.create_user_for_manager",
+            "travel_tech.manager.auto_user_permission.create_user_permission_for_hr_manager"
+        ],
+        "on_update": [
+            "travel_tech.manager.user_creation.create_user_for_manager",
+            "travel_tech.manager.auto_user_permission.create_user_permission_for_hr_manager"
+        ]
+    },
+    "Travel Request": {
+        "after_insert": "travel_tech.manager.auto_submit_travel_request.auto_submit_travel_request"
+    }
+}
+
+
+
 
 # Scheduled Tasks
 # ---------------
@@ -244,4 +266,13 @@ app_license = "mit"
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
+fixtures = [
+    "Custom Field",
+    "Property Setter",
+    "Workflow",
+    "Workflow State",
+    "Workflow Action Master",
+    "Role"
+]
 
