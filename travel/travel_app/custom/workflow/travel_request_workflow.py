@@ -11,8 +11,44 @@ def ensure_roles_exist():
             frappe.logger().info(f"✅ Created missing Role: {role}")
     frappe.db.commit()
 
+
+def ensure_workflow_states_and_actions():
+    """Ensure all required Workflow States and Actions exist."""
+    # Define required workflow states
+    states = {
+        "Draft": "Warning",
+        "Pending": "Info",
+        "Approved": "Success",
+        "Rejected": "Danger"
+    }
+
+    # Create missing states
+    for state_name, style in states.items():
+        if not frappe.db.exists("Workflow State", state_name):
+            frappe.get_doc({
+                "doctype": "Workflow State",
+                "workflow_state_name": state_name,
+                "style": style
+            }).insert(ignore_permissions=True)
+            frappe.logger().info(f"✅ Created missing Workflow State: {state_name}")
+
+    # Define required workflow actions
+    actions = ["Submit", "Approve", "Reject"]
+    for action_name in actions:
+        if not frappe.db.exists("Workflow Action", action_name):
+            frappe.get_doc({
+                "doctype": "Workflow Action",
+                "workflow_action_name": action_name
+            }).insert(ignore_permissions=True)
+            frappe.logger().info(f"✅ Created missing Workflow Action: {action_name}")
+
+    frappe.db.commit()
+
+
 def execute():
+    """Create the Travel Request Approval Workflow if missing."""
     ensure_roles_exist()
+    ensure_workflow_states_and_actions()
 
     # Check if workflow already exists
     if frappe.db.exists("Workflow", "Travel Request Approval Workflow"):
@@ -22,7 +58,7 @@ def execute():
     # Define workflow states
     states = [
         {"state": "Draft", "doc_status": 0, "allow_edit": "Employee"},
-        {"state": "Pending", "doc_status": 1, "allow_edit": "HR Manager"},
+        {"state": "Pending", "doc_status": 0, "allow_edit": "Employee"},
         {"state": "Approved", "doc_status": 1, "allow_edit": "HR Manager"},
         {"state": "Rejected", "doc_status": 1, "allow_edit": "HR Manager"},
     ]
