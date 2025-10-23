@@ -141,7 +141,7 @@ app_license = "mit"
 # }
 
 doc_events = {
-    "Travel Policy": {
+    "Travel Policy Data": {
         "after_insert": "travel.travel_app.custom.api.policy.upload_policy_to_external_api",
         "on_update": "travel.travel_app.custom.api.policy.upload_policy_to_external_api"
     },
@@ -159,7 +159,6 @@ doc_events = {
         "after_insert": "travel.travel_app.custom.auto_creations.auto_submit_travel_request.auto_submit_travel_request"
     }
 }
-
 
 # Scheduled Tasks
 # ---------------
