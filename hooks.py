@@ -267,3 +267,12 @@ ddoc_events = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    "Custom Field",
+    "Property Setter",
+    "Workflow",
+    "Workflow State",
+    "Workflow Action Master",
+    "Role"
+]
+
