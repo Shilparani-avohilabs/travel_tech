@@ -23,7 +23,13 @@ def upload_policy_to_external_api(doc, method):
 
         # --- 1️⃣ Get file path safely ---
         file_doc = frappe.get_doc("File", {"file_url": doc.policy_file})
-        file_path = frappe.get_site_path("..", file_doc.file_url.strip("/"))
+
+        if file_doc.file_url.startswith("/private/files/"):
+            file_path = frappe.get_site_path("private", "files", os.path.basename(file_doc.file_url))
+        else:
+            file_path = frappe.get_site_path("public", "files", os.path.basename(file_doc.file_url))
+
+        logger.info(f"Resolved File Path: {file_path}")
 
         if not os.path.exists(file_path):
             frappe.throw(f"File not found at path: {file_path}")
@@ -43,7 +49,7 @@ def upload_policy_to_external_api(doc, method):
         else:
             api_response_msg = f"❌ Upload failed ({response.status_code}): {response.text}"
 
-        # --- 3️⃣ Read PDF Content ---
+        # --- 3️⃣ Extract PDF text ---
         pdf_reader = PdfReader(file_path)
         pdf_text = "".join(page.extract_text() or "" for page in pdf_reader.pages)
         pdf_text = pdf_text[:5000]  # truncate long text
@@ -55,28 +61,28 @@ def upload_policy_to_external_api(doc, method):
         })
 
         if existing_policy_data:
-            # Update existing
+            # Update existing record
             policy_data_doc = frappe.get_doc("Employee Policy Data", existing_policy_data)
             policy_data_doc.file_content = pdf_text
             policy_data_doc.save(ignore_permissions=True)
             action_message = "✅ Policy updated successfully in Employee Policy Data."
         else:
-            # Create new
+            # Create new record
             frappe.get_doc({
                 "doctype": "Employee Policy Data",
                 "policy_name": doc.name,
                 "company": doc.company,
                 "file_content": pdf_text
             }).insert(ignore_permissions=True)
-            action_message = "✅ New Policy uploaded and stored successfully in Employee Policy Data."
+            action_message = "✅ New policy created and stored in Employee Policy Data."
 
             # 🧠 Prevent immediate on_update trigger
             frappe.flags.skip_next_update_upload = True
 
-        # --- 5️⃣ Update Travel Policy Data api_response field ---
+        # --- 5️⃣ Update API response in Travel Policy Data ---
         frappe.db.set_value("Travel Policy Data", doc.name, "api_response", api_response_msg)
-
         frappe.db.commit()
+
         frappe.msgprint(action_message)
         logger.info(action_message)
 
