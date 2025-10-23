@@ -139,23 +139,23 @@ app_license = "mit"
 # 		"on_trash": "method"
 # 	}
 # }
-ddoc_events = {
+doc_events = {
     "Travel Policy": {
-        "after_insert": "travel_tech.api.policy.upload_policy_to_external_api",
-        "on_update": "travel_tech.api.policy.upload_policy_to_external_api"
+        "after_insert": "travel_tech.custom.api.policy.upload_policy_to_external_api",
+        "on_update": "travel_tech.custom.api.policy.upload_policy_to_external_api"
     },
     "Employee": {
         "after_insert": [
-            "travel_tech.manager.user_creation.create_user_for_manager",
-            "travel_tech.manager.auto_user_permission.create_user_permission_for_hr_manager"
+            "travel_tech..custom.manager.user_creation.create_user_for_manager",
+            "travel_tech.custom.manager.auto_user_permission.create_user_permission_for_hr_manager"
         ],
         "on_update": [
-            "travel_tech.manager.user_creation.create_user_for_manager",
-            "travel_tech.manager.auto_user_permission.create_user_permission_for_hr_manager"
+            "travel_tech.custom.manager.user_creation.create_user_for_manager",
+            "travel_tech.custom.manager.auto_user_permission.create_user_permission_for_hr_manager"
         ]
     },
     "Travel Request": {
-        "after_insert": "travel_tech.manager.auto_submit_travel_request.auto_submit_travel_request"
+        "after_insert": "travel_tech.custom.manager.auto_submit_travel_request.auto_submit_travel_request"
     }
 }
 
