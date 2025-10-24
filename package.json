@@ -1,0 +1,11 @@
+{
+  "name": "travel",
+  "version": "1.0.0",
+  "description": "Custom Travel App for Frappe",
+  "license": "MIT",
+  "scripts": {
+    "build": "frappe build",
+    "watch": "frappe watch"
+  }
+}
+
